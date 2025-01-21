@@ -44,12 +44,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     marginTop: 20,
-    backgroundColor: '#000'
   },
   addProduct: {
     backgroundColor: '#fff',
     width: '100%',
-    height: 140,
+    height: 130,
     marginTop: 15,
     borderRadius: 10
   },
@@ -57,10 +56,10 @@ const styles = StyleSheet.create({
     width: 110,
     height: 100,
     marginTop: 20,
-    marginLeft: 10
+    resizeMode: 'contain',
   },
   cartDetails: {
-    marginTop: 30,
+    marginTop: 20,
     marginLeft: 10,
     alignSelf: 'center'
   },

@@ -1,15 +1,14 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { TextInput as Input } from 'react-native'
+import { widthPercentageToDP } from 'react-native-responsive-screen'
 
 interface TextProps {
   placeholder: string
   secureTextEntry: boolean
   value: any
   setValue: any
-  outlineStyle: any
   maxLength: number,
-  props: any,
 
 }
 const TextInput: React.FC<TextProps> = ({
@@ -17,9 +16,7 @@ const TextInput: React.FC<TextProps> = ({
   secureTextEntry = false,
   value,
   setValue,
-  outlineStyle,
   maxLength,
-  ...props
 }) => {
   return (
     <View style={styles.container}>
@@ -33,7 +30,6 @@ const TextInput: React.FC<TextProps> = ({
         value={value}
         onChangeText={(text) => setValue(text)}
         maxLength={maxLength}
-        {...props}
       />
       {/* {description && !errorText ? (
         <Text>{description}</Text>
@@ -50,8 +46,10 @@ const styles = StyleSheet.create({
 
   },
   input: {
-    borderRadius: 13,
+    borderRadius: widthPercentageToDP(3),
     color: '#000',
-    paddingLeft: 10,
+    paddingLeft: widthPercentageToDP(3),
+    // marginTop: 5,
+    paddingTop: 0
   },
 })

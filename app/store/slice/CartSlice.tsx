@@ -1,43 +1,39 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { RootState } from "../Store";
+
+export interface cart {
+    id: string,
+    title: string,
+    image: string,
+    price: number,
+    qty: number
+}
+const initialState: cart[] = []
 
 const cartSlice = createSlice({
     name: 'cart',
-    initialState: [],
+    initialState,
     reducers: {
-        addItemToCart(state: any, action: any) {
-            // const tempData = state.data.push({ ...payload})
-            //     const existingItem = state.data.find((item) => item.id === tempData.id);
-            //    if(existingItem){
-            //     existingItem.quantity++;
-            //     existingItem.totalPrice = existingItem.price * existingItem.quantity;
-            //    }else{
-            //     state.data.push(name:any ,price , totalPrice, id , quantity){
-            //         name:action.payload.name,
-            //         price: action.payload.price,
-            //         totalPrice = action.payload.totalPrice,
-            //         id: action.payload.id,
-            //         quantity:1,
-            //     });
-            //    } 
-            // const { id } = action.payload;
-            // const find = state.data.find((item: any) => item.id === id)
-            // if (find) {
-            //     return state.data.map((item: any) =>
-            //         item.id === id ? {
-            //             ...item,
-            //             quantity: item.quantity + 1
-            //         } : item
-            //     )
-            // } else {
-            //     state.data.push({
-            //         ...action
-            //         ,
-            //         quantity: 1,
-            //     })
-            // }
-            state.push(action.payload);
+        addItemToCart(state, action: PayloadAction<cart>) {
+            let tempIndex = -1;
+            state.map((item: any, index: any) => {
+                if (item.id == action.payload.id) {
+                    tempIndex = index;
+                }
+            });
+            if (tempIndex == -1) {
+                state.push({
+                    id: action.payload.id,
+                    title: action.payload.title,
+                    image: action.payload.image,
+                    price: action.payload.price,
+                    qty: action.payload.qty + 1,
+                });
+            } else {
+                state[tempIndex].qty = state[tempIndex].qty + 1;
+            }
         },
-        reduceItemToCart(state, action) {
+        reduceItemToCart(state, action: PayloadAction<cart>) {
             // let tempData = state.data;
 
             // tempData.map(item => {
@@ -47,7 +43,7 @@ const cartSlice = createSlice({
             // })
             // state.data = tempData;
         },
-        removeItemToCart(state, action) {
+        removeItemToCart(state, action: PayloadAction<string>) {
             return (state = state.filter((item: any) => item.id !== action.payload)
             )
             // let tempData = state;
@@ -63,5 +59,5 @@ const cartSlice = createSlice({
 });
 
 export const { addItemToCart, reduceItemToCart, removeItemToCart, emptyCart } = cartSlice.actions;
-
+export const selectCart = (state: RootState) => state.cart;
 export default cartSlice.reducer;

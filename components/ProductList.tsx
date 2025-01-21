@@ -1,16 +1,16 @@
 import { Pressable, StyleSheet, Text, View, Image, ScrollView } from 'react-native'
 import * as React from 'react'
-import { Product } from './Product'
 import MasonryList from '@react-native-seoul/masonry-list'
 import { HeartIcon } from 'react-native-heroicons/outline'
-import { Link, router } from 'expo-router'
-import { useDispatch, useSelector } from 'react-redux'
-import { fetchProducts } from '@/app/store/Api'
+import { router } from 'expo-router'
+import { useDispatch } from 'react-redux'
 import { addToWishlist } from '@/app/store/slice/WishListSlice'
-import MenuItem from 'react-native-paper/lib/typescript/components/Menu/MenuItem'
 import Loder from '@/app/Helper/Loder'
 import { theme } from '@/constants/Colors'
 import Category from './Category'
+import * as Animatable from 'react-native-animatable';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen'
+
 
 const ProductList = () => {
     const [product, setProduct] = React.useState([]);
@@ -46,7 +46,7 @@ const ProductList = () => {
             <Category isActiveCategory={isActiveCategory} setIsActiveCategory={setIsActiveCategory} />
             <ScrollView showsVerticalScrollIndicator={false}>
                 {isLoading ? (
-                    <Loder size={40} color='green' />
+                    <Loder size={hp(6)} color='green' />
                 ) :
                     <MasonryList
                         data={fillterProducts}
@@ -67,24 +67,24 @@ export default ProductList
 const ProductData = ({ item, index }: any) => {
     const dispatch = useDispatch();
     return (
-        <View key={index} style={{ marginHorizontal: 3 }}>
+        <View key={index} style={{ marginHorizontal: wp(0.8) }}>
 
             <Pressable onPress={() => router.push({
                 pathname: '/Screen/SingleDetails',
                 params: item
             })}>
-                <View style={styles.card}>
+                <Animatable.View animation={'fadeInUp'} style={[styles.card]}>
                     <View style={styles.productsCard}>
                         <Image style={styles.images} source={{ uri: item.image }} />
                         <View style={styles.icon}>
-                            <HeartIcon size={26} color={'#000'} onPress={() => dispatch(addToWishlist(item))} />
+                            <HeartIcon size={hp(2.6)} color={'#000'} onPress={() => dispatch(addToWishlist(item))} />
                         </View>
                     </View>
-                    <View style={{ padding: 10, }}>
-                        <Text style={{ color: "#000", fontSize: 18 }}>{item.title.slice(0, 14)}</Text>
-                        <Text style={{ fontSize: 14, fontWeight: '300' }}>$ {item.price}</Text>
+                    <View style={{ padding: wp(4) }}>
+                        <Text style={{ color: "#000", fontSize: hp(1.9), }}>{item.title.slice(0, 18)}</Text>
+                        <Text style={{ fontSize: hp(1.7), fontWeight: '300', color: "#000" }}>$ {item.price}</Text>
                     </View>
-                </View>
+                </Animatable.View>
             </Pressable>
 
         </View>
@@ -95,36 +95,40 @@ const styles = StyleSheet.create({
     productList: {
         // marginHorizontal: 5,
         backgroundColor: '#fff',
-        borderRadius: 25,
-        height: '100%',
+        borderRadius: wp(5),
+        height: hp(73.5),
     },
     productsCard: {
         justifyContent: 'center',
-        // alignItems: 'center',
-        // backgroundColor: '#fff',
         flexDirection: 'row',
+        borderRadius: 10,
+        // shadowOffset: { width: 0, height: 0.2 },
+        // shadowColor: '#8e8e8e',
+        // shadowOpacity: 0.01,
+        // elevation: 1,
+        // marginBottom: hp(2),
     },
     card: {
-        shadowOpacity: 3,
-        shadowRadius: 10,
-        shadowOffset: { width: 0.2, height: 1 },
-        marginBottom: 20,
-        elevation: 2,
+        marginBottom: hp(3),
+        borderRadius: wp(3.5),
+        backgroundColor: '#f2f7ff',
+
     },
     images: {
-        width: 100,
-        height: 100,
+        width: wp(40.3),
+        height: hp(15),
         resizeMode: 'contain',
         // marginVertical: 10,
-        marginTop: 20,
-        marginBottom: 8,
+        marginTop: hp(2),
+        backgroundColor: '#fff',
+        borderRadius: wp(2.6),
     },
     icon: {
         position: 'absolute',
-        right: 3,
-        top: 5,
-        borderRadius: 50,
-        padding: 7,
+        right: wp(1),
+        top: hp(0.6),
+        borderRadius: wp(10),
+        padding: wp(2),
         backgroundColor: theme.colors.inverseOnSurface,
     }
 })

@@ -1,23 +1,47 @@
-import { StyleSheet, Text, View, Image, TouchableOpacity, Dimensions } from 'react-native'
+import { StyleSheet, Text, View, Image, TouchableOpacity, Dimensions, Pressable, StatusBar } from 'react-native'
 import React from 'react'
 import { Link, useRouter } from 'expo-router'
-import Animated, { FadeInRight } from 'react-native-reanimated';
-
-const { width, height } = Dimensions.get('window');
+import Animated, { FadeInDown, FadeInRight, FadeInUp } from 'react-native-reanimated';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import LottieView from 'lottie-react-native';
+// const { width, height } = Dimensions.get('window');
 
 const index = () => {
   const router = useRouter();
+  const getData = async () => {
+    const email = await AsyncStorage.getItem('EMAIL');
+
+    if (email !== null) {
+      router.push('/(tabs)/Home');
+      console.log('login....')
+    } else {
+      router.push('/auth/Signin');
+    }
+  }
+
+
   return (
     <View style={styles.containder}>
-      <Animated.View entering={FadeInRight.delay(200).springify()} style={{ flex: 1 }}>
-        <Image source={require('./images/d.png')} style={styles.image} />
-        {/* <Animated.View entering={FadeInRight.delay(300).springify()} style={styles.trend}>
-          <Text style={styles.collectText}>Collecting New Trend</Text>
-        </Animated.View> */}
-        <Animated.View entering={FadeInRight.delay(300).springify()} style={styles.trend}>
-          <TouchableOpacity onPress={() => router.push("/(tabs)/Home")}>
-            <Text style={styles.discoveryText}>Discovery</Text>
-          </TouchableOpacity>
+      <StatusBar barStyle={'dark-content'} />
+      <Animated.View entering={FadeInDown.delay(200).springify()} style={{ flex: 1 }}>
+        <LottieView
+          autoPlay
+          style={{
+            width: 300,
+            height: 600,
+            alignSelf: 'center',
+            // marginTop: 50
+          }}
+          source={require('../assets/anitw0.json')}
+        />
+        <Animated.View entering={FadeInDown.delay(500).springify()} style={styles.discovery}>
+          <Text style={styles.collectText}>Embrace Your Inner Fashion Guru</Text>
+          <Text style={[styles.collectText, { marginTop: 5 }]}>Laughter Guaranteed with Every Purchase</Text>
+        </Animated.View>
+        <Animated.View entering={FadeInDown.delay(700).springify()} style={styles.trend}>
+          <Pressable onPress={getData}>
+            <Text style={styles.discoveryText}>Discovery...  </Text>
+          </Pressable>
         </Animated.View>
       </Animated.View>
 
@@ -30,34 +54,33 @@ export default index
 const styles = StyleSheet.create({
   containder: {
     flex: 1,
-    backgroundColor: '#000',
+    // backgroundColor: '#000',
   },
   trend: {
     position: 'absolute',
-    bottom: 0,
-    // right: 30,
-    backgroundColor: '#bebebe',
-    padding: 19,
-    borderRadius: 10,
-    width: width * 1,
+    bottom: 20,
+    right: 0,
+    backgroundColor: '#571B7E',
+    padding: 10,
+    paddingHorizontal: 10,
+    borderTopLeftRadius: 20,
+    borderBottomLeftRadius: 20
   },
   discovery: {
-    textAlign: 'center',
-    backgroundColor: 'pink',
-    width: width * 1,
-    height: height * 1,
-    borderRadius: 30,
+    alignContent: 'center',
+    alignItems: 'center'
     // marginVertical:5,
   },
   collectText: {
-    textAlign: 'center',
-    fontSize: 50
+    fontSize: 18,
+    color: '#000',
+    fontWeight: '600'
   },
   discoveryText: {
     textAlign: 'center',
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: '600',
-    color: 'green'
+    color: '#fff'
   },
   image: {
     width: '100%',

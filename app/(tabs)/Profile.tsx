@@ -1,44 +1,45 @@
 import { StatusBar, StyleSheet, Text, View, Image, TouchableOpacity, Pressable } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useRouter } from 'expo-router'
-import ProfileModal from '../Helper/ProfileModal';
+import ProfileModal from '../Helper/ProfileEdit';
 import ProfileScreen from '../Helper/ProfileScreen';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import User from '../images/user.png'
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 const Profile = () => {
-  const [isVisble, setIsVisible] = useState(false);
+  const [name, setName] = useState<string>();
+  const [image, setImage] = useState<string>();
   const router = useRouter();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const user = await AsyncStorage.getItem('NAME');
+      const profile = await AsyncStorage.getItem('Image');
+      console.log('user...', user)
+      setName(user)
+      setImage(profile);
+    }
+    fetchData();
+  }, [])
 
 
   return (
     <View style={{ flex: 1, backgroundColor: '#000' }}>
-      <StatusBar barStyle={'dark-content'} />
       <View style={styles.container}>
         <View style={styles.box}>
-          <ProfileModal />
-          <View style={styles.signinbutton}>
-            <View style={{ flexDirection: 'row', marginTop: 20 }}>
-              <TouchableOpacity style={styles.signin} onPress={() => router.push('/auth/Login')}>
-                <Text style={styles.text}>SignIn</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.signin} onPress={() => router.push('/auth/SignUp')}>
-                <Text style={styles.text}>SignUp</Text>
-              </TouchableOpacity>
-            </View>
+          <Image source={image ? { uri: image } : User} style={styles.dp} />
+          <Text style={{ fontSize: hp(4), fontWeight: '500' }}>{name}</Text>
+          <View style={{ marginTop: hp(2) }}>
+            <TouchableOpacity style={styles.signin} onPress={() => router.push('/Helper/ProfileEdit')}>
+              <Text style={styles.text}>Edit Profile</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </View>
-      <ProfileScreen />
-      {/* <View style={styles.modal}>
-        <Modal visible={isVisble} contentContainerStyle={{ backgroundColor: '#fff' }}>
-          <Text>Modal</Text>
-        </Modal>
-      </View> */}
-      {/* <View>
-        <BottomSheet index={1} snapPoints={["25%", "50%", "70%"]}>
-          <Text>Hello</Text>
-        </BottomSheet>
-      </View> */}
+      <View style={{ marginTop: 2 }}>
+        <ProfileScreen />
+      </View>
     </View>
   )
 }
@@ -47,37 +48,33 @@ export default Profile
 
 const styles = StyleSheet.create({
   container: {
-    height: '23%',
-    marginVertical: 25,
+    height: hp(30),
     backgroundColor: '#fff',
-    borderBottomLeftRadius: 25,
-    borderBottomRightRadius: 25
+    borderBottomLeftRadius: wp(5),
+    borderBottomRightRadius: wp(5)
   },
   box: {
-    flexDirection: 'row',
-  },
-  image: {
-    padding: 10
+    alignItems: 'center',
+    marginTop: hp(5)
   },
   signinbutton: {
     justifyContent: 'center',
   },
   signin: {
-    borderRadius: 8,
-    padding: 4,
-    marginRight: 10,
-    borderColor: 'blue',
+    borderRadius: wp(5),
+    padding: wp(2),
     backgroundColor: 'black'
   },
   dp: {
-    width: 130,
-    height: 140,
+    width: 100,
+    height: 100,
     borderRadius: 100,
+    // resizeMode: 'contain',
   },
   text: {
-    fontSize: 16,
+    fontSize: hp(2),
     fontWeight: '600',
-    marginHorizontal: 20,
+    marginHorizontal: wp(4),
     color: '#fff'
   },
   modal: {

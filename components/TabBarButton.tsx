@@ -15,11 +15,11 @@ const TabBarButton = ({ isFocused, onPress, onLongPress, label, routeName }:
       onPress={onPress}
       onLongPress={onLongPress}
     >
-      {
+      {/* {
         icons[routeName]({
           color: isFocused ? '#673ad7' : '#222',
         })
-      }
+      } */}
       <Text style={{ color: isFocused ? '#673ab7' : '#222' }}>
         {label}
       </Text>

@@ -1,6 +1,7 @@
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import ProductList from './ProductList'
+import * as Animatable from 'react-native-animatable';
+import { heightPercentageToDP, widthPercentageToDP } from 'react-native-responsive-screen';
 
 const Category = ({ isActiveCategory, setIsActiveCategory }) => {
   const [isCategory, setIsCategory] = useState([]);
@@ -26,7 +27,7 @@ const Category = ({ isActiveCategory, setIsActiveCategory }) => {
         horizontal
         showsHorizontalScrollIndicator={false}
       >
-        <View style={styles.categoryText}>
+        <Animatable.View animation={'fadeInRight'} duration={1000} style={styles.categoryText}>
           {
             category.map((item, index) => {
               let isActive = item == isActiveCategory
@@ -44,11 +45,8 @@ const Category = ({ isActiveCategory, setIsActiveCategory }) => {
 
             })
           }
-        </View>
+        </Animatable.View>
       </ScrollView>
-
-      {/* <ProductList /> */}
-
     </View>
 
   )
@@ -65,12 +63,12 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   category: {
-    borderWidth: 1,
-    padding: 10,
-    borderColor: 'gray',
-    borderRadius: 10,
-    marginHorizontal: 10,
-    marginTop: 20,
-    marginBottom: 10,
+    borderWidth: 0.4,
+    padding: widthPercentageToDP(2.5),
+    borderColor: '#8e8e8e',
+    borderRadius: widthPercentageToDP(3.4),
+    marginHorizontal: widthPercentageToDP(3),
+    marginTop: heightPercentageToDP(2.5),
+    marginBottom: heightPercentageToDP(2.3),
   },
 })
